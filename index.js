@@ -15,22 +15,22 @@ app.get("/", (request, response) => {
   response.status(200).send("hello world");
 });
 app.post("/payments/create", async (request, response) => {
-    try{
-      const total = Math.ceil(request.query.total);
-      console.log("Payment Request Recieved for this amount", total);
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: total, // subunits of the currency
-        currency: "inr",
-      });
-      console.log(paymentIntent);
-      response.status(201).send({
-        clientSecret: paymentIntent.client_secret,
-      });
-    }catch(e){
-      console.log(e);
-      return response.send({error:e.message});
+  try {
+    const total = Math.ceil(request.query.total);
+    console.log("Payment Request Recieved for this amount", total);
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: total, // subunits of the currency
+      currency: "inr",
+    });
+    console.log(paymentIntent);
+    response.status(201).send({
+      clientSecret: paymentIntent.client_secret,
+    });
+  } catch (e) {
+    console.log(e);
+    return response.send({ error: e.message });
   }
-  
 });
 // - Listen command
-app.listen(8282, () => console.log("LISTENING ON PORT 8282"));
+const port = process.env.PORT || 8282;
+app.listen(port, () => console.log("LISTENING ON PORT 8282"));
